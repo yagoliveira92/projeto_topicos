@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:projeto_topicos/src/viewmodels/sql_view_model.dart';
 import 'package:provider/provider.dart';
 
-class InputScreen extends StatelessWidget {
+class InputScreen extends StatefulWidget {
   const InputScreen({super.key});
 
+  @override
+  State<InputScreen> createState() => _InputScreenState();
+}
+
+class _InputScreenState extends State<InputScreen> {
   @override
   Widget build(BuildContext context) {
     final sqlViewModel = context.watch<SQLViewModel>();
