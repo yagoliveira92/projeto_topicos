@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_topicos/src/views/input_screen.dart';
+import 'package:provider/provider.dart';
+import 'src/viewmodels/sql_view_model.dart';
+import 'src/views/input_screen.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => SQLViewModel())],
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: InputScreen());
+    return MaterialApp(
+      title: 'Projeto Tópicos',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const InputScreen(),
+    );
   }
 }

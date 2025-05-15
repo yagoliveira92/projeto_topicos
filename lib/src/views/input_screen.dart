@@ -1,41 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_topicos/src/viewmodels/sql_view_model.dart';
+import 'package:provider/provider.dart';
 
-class InputScreen extends StatefulWidget {
+class InputScreen extends StatelessWidget {
   const InputScreen({super.key});
 
   @override
-  State<InputScreen> createState() => _InputScreenState();
-}
-
-class _InputScreenState extends State<InputScreen> {
-  final TextEditingController _sqlController = TextEditingController();
-
-  void _submitSQL() {
-    final sql = _sqlController.text.trim();
-    if (sql.isNotEmpty) {
-      print("SQL enviado: $sql");
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("SQL enviado: $sql")));
-      _sqlController.clear();
-    }
-  }
-
-  @override
-  void dispose() {
-    _sqlController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final sqlViewModel = context.watch<SQLViewModel>();
+
     return Scaffold(
-      body: Center(child: Text("Conteúdo principal da tela")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              sqlViewModel.lastSubmittedSQL != null
+                  ? "Último SQL enviado: ${sqlViewModel.lastSubmittedSQL}"
+                  : "Conteúdo principal da tela",
+            ),
+            if (sqlViewModel.responseMessage != null)
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  sqlViewModel.responseMessage!,
+                  style: const TextStyle(color: Colors.green),
+                ),
+              ),
+          ],
+        ),
+      ),
       bottomSheet: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-          boxShadow: [
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          boxShadow: const [
             BoxShadow(
               color: Colors.black26,
               blurRadius: 10,
@@ -43,24 +42,23 @@ class _InputScreenState extends State<InputScreen> {
             ),
           ],
         ),
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 30),
-        //margin: EdgeInsets.symmetric(vertical: 16, horizontal: 30),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 30),
         child: Row(
           children: [
             Expanded(
               child: TextField(
-                controller: _sqlController,
+                controller: sqlViewModel.sqlController,
                 decoration: const InputDecoration(
                   labelText: 'Escreva seu SQL',
                   border: OutlineInputBorder(),
                 ),
-                onSubmitted: (_) => _submitSQL(), // Envia ao pressionar "Enter"
+                onSubmitted: (_) => sqlViewModel.submitSQL(),
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             IconButton(
-              icon: Icon(Icons.send_rounded, color: Colors.blue),
-              onPressed: _submitSQL,
+              icon: const Icon(Icons.send_rounded, color: Colors.blue),
+              onPressed: sqlViewModel.submitSQL,
             ),
           ],
         ),
