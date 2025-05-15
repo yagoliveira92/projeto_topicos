@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "83769187560",
+    "project_id": "projeto-topicos-cf5ee",
+    "storage_bucket": "projeto-topicos-cf5ee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83769187560:android:7f478533a249bb7a807d5d",
+        "android_client_info": {
+          "package_name": "com.example.projeto_topicos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQpbH_9kczym1_69M0pEWWk6ZqpPsYFc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

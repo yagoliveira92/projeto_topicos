@@ -1,9 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_topicos/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'src/viewmodels/sql_view_model.dart';
 import 'src/views/input_screen.dart';
 
-void main() {
+Future<void> main() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => SQLViewModel())],
