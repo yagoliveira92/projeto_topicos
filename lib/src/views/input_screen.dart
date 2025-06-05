@@ -66,7 +66,10 @@ class _InputScreenState extends State<InputScreen> {
                   children: [
                     ElevatedButton(
                       onPressed: () => viewModel.submitSQL(),
-                      child: const Text('Enviar para Otimização'),
+                      child:
+                          viewModel.loading
+                              ? const CircularProgressIndicator()
+                              : const Text('Enviar para Otimização'),
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(

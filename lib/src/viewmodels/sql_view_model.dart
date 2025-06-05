@@ -31,6 +31,9 @@ class SQLViewModel extends ChangeNotifier {
   String? _initializationError;
   String? get initializationError => _initializationError;
 
+  bool _loading = false;
+  bool get loading => _loading;
+
   // Método de inicialização assíncrona
   Future<void> _initialize() async {
     try {
@@ -81,6 +84,8 @@ class SQLViewModel extends ChangeNotifier {
     final sql = sqlController.text.trim();
 
     if (sql.isNotEmpty) {
+      _loading = true;
+      notifyListeners();
       final String? databaseSchema = await _prefsService.getSqlFileContent();
       final command = SendSQLCommandFirebase(
         sqlService: _sqlService,
@@ -92,6 +97,7 @@ class SQLViewModel extends ChangeNotifier {
         final response = await command.execute();
         _responseMessage = response;
         _lastSubmittedSQL = sql;
+        _loading = false;
         sqlController.clear();
       } catch (e) {
         _responseMessage = 'Erro: $e';

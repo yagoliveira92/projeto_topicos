@@ -77,7 +77,7 @@ fastlane/readme.md
 .dart_tool/
 .packages
 .pub/
-build/
+public/
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
 
