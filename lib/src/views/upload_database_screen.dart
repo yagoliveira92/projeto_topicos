@@ -32,6 +32,7 @@ class _UploadDatabaseScreenState extends State<UploadDatabaseScreen> {
             title: const Text('Análise de SQL'),
             centerTitle: true,
           ),
+          backgroundColor: Colors.white,
           body: Center(
             child: Padding(
               padding: const EdgeInsets.all(24.0),
@@ -52,7 +53,7 @@ class _UploadDatabaseScreenState extends State<UploadDatabaseScreen> {
                   ),
                   SizedBox(height: 16),
                   Image.asset(
-                    'assets/logo_upload.png',
+                    'assets/logo_upload.jpg',
                     width: 150,
                     height: 150,
                   ),

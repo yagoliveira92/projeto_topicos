@@ -1,6 +1,6 @@
 {
-    "name": "projeto_topicos",
-    "short_name": "projeto_topicos",
+    "name": "Análise de SQL por IA",
+    "short_name": "Análise de SQL",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
