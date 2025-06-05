@@ -1,4 +1,5 @@
 import 'dart:convert' show utf8;
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_topicos/src/commands/upload_command.dart';
@@ -17,10 +18,8 @@ class UploadViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  // Propriedade para navegação (será observada pela View)
   bool _shouldNavigateToNextScreen = false;
   bool get shouldNavigateToNextScreen => _shouldNavigateToNextScreen;
-
   void resetNavigation() {
     _shouldNavigateToNextScreen = false;
     // Não é necessário notificar listeners aqui, a menos que
@@ -31,8 +30,6 @@ class UploadViewModel extends ChangeNotifier {
     _errorMessage = null; // Limpa erros anteriores
     if (command is PickAndSaveFileCommand) {
       await _pickAndSaveFile();
-    } else if (command is GoToNextScreenCommand) {
-      _navigateToNextScreen();
     }
     notifyListeners();
   }
@@ -53,6 +50,7 @@ class UploadViewModel extends ChangeNotifier {
         _fileName = result.files.first.name;
 
         await _prefsService.saveSqlFileContent(content);
+        _navigateToNextScreen();
       } else {
         // O usuário cancelou o seletor de arquivos
         _fileName = null;
@@ -69,7 +67,6 @@ class UploadViewModel extends ChangeNotifier {
   void _navigateToNextScreen() {
     if (_fileName != null) {
       _shouldNavigateToNextScreen = true;
-      // Notificar os listeners fará com que a UI reaja à mudança de _shouldNavigateToNextScreen
       notifyListeners();
     } else {
       _errorMessage = "Nenhum arquivo selecionado para visualizar.";
@@ -77,8 +74,10 @@ class UploadViewModel extends ChangeNotifier {
     }
   }
 
-  // Método para carregar o conteúdo na próxima tela (pode ser movido para uma ViewModel separada para ShowSqlContentScreen)
-  Future<String?> getSqlContent() {
-    return _prefsService.getSqlFileContent();
+  Future<void> saveDragFile(Uint8List fileBytes, String fileName) async {
+    final content = fileBytes != null ? utf8.decode(fileBytes) : '';
+    _fileName = fileName;
+    await _prefsService.saveSqlFileContent(content);
+    _navigateToNextScreen();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_topicos/src/viewmodels/sql_view_model.dart';
+import 'package:projeto_topicos/src/views/file_content_screen.dart';
 import 'package:provider/provider.dart';
 
 class InputScreen extends StatefulWidget {
@@ -13,64 +14,90 @@ class _InputScreenState extends State<InputScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<SQLViewModel>(
-      builder:
-          (context, sqlViewModel, child) => Scaffold(
-            body: Center(
+      builder: (context, viewModel, child) {
+        if (viewModel.isInitializing) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('SQL Chat')),
+            body: const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    sqlViewModel.lastSubmittedSQL != null
-                        ? "Último SQL enviado: ${sqlViewModel.lastSubmittedSQL}"
-                        : "Conteúdo principal da tela",
-                  ),
-                  if (sqlViewModel.responseMessage != null)
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        sqlViewModel.responseMessage!,
-                        style: const TextStyle(color: Colors.green),
-                      ),
-                    ),
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text("Inicializando o chat e carregando esquema..."),
                 ],
               ),
             ),
-            bottomSheet: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
+          );
+        }
+        if (viewModel.initializationError != null) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('SQL Chat')),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "Erro na inicialização: ${viewModel.initializationError}\nPor favor, verifique se você fez o upload do arquivo .sql.",
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: Offset(0, -2),
-                  ),
-                ],
               ),
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 30),
-              child: Row(
-                children: [
+            ),
+          );
+        }
+        // UI principal quando inicializado
+        return Scaffold(
+          appBar: AppBar(title: const Text('SQL Chat - Pronto')),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                TextField(
+                  controller: viewModel.sqlController,
+                  decoration: const InputDecoration(
+                    labelText: 'Digite sua query SQL aqui',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => viewModel.submitSQL(),
+                      child: const Text('Enviar para Otimização'),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final fileContent = await viewModel.getSqlContent();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => FileContentScreen(
+                                  fileContent: fileContent ?? '',
+                                ),
+                          ),
+                        );
+                      },
+                      child: const Text('Ver Conteúdo'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                if (viewModel.responseMessage != null)
                   Expanded(
-                    child: TextField(
-                      controller: sqlViewModel.sqlController,
-                      decoration: const InputDecoration(
-                        labelText: 'Escreva seu SQL',
-                        border: OutlineInputBorder(),
-                      ),
-                      onSubmitted: (_) => sqlViewModel.submitSQL(),
+                    child: SingleChildScrollView(
+                      child: Text(viewModel.responseMessage!),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    icon: const Icon(Icons.send_rounded, color: Colors.blue),
-                    onPressed: sqlViewModel.submitSQL,
-                  ),
-                ],
-              ),
+              ],
             ),
           ),
+        );
+      },
     );
   }
 }
