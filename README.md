@@ -37,7 +37,6 @@ As principais funcionalidades para alcançar este objetivo incluem:
 *   **SharedPreferences:** Para armazenamento local de dados (esquema SQL).
 *   **File Picker / Dropzone (flutter_dropzone):** Para seleção e upload de arquivos.
 *   **Google Fonts:** Para tipografia customizada.
-*   **[Outras dependências importantes - ex: http, etc.]**
 
 ## 🚀 Como Executar o Projeto Localmente
 
@@ -72,9 +71,9 @@ As principais funcionalidades para alcançar este objetivo incluem:
 ### Web 
 
 Para gerar um build de release para a Web:
-    ```bash
-    flutter build web 
-    ```
+```bash
+flutter build web 
+```
 Os arquivos de build estarão em `build/web/`. Você pode então hospedar esses arquivos em qualquer serviço de hospedagem web estática.
 
 ## ☁️ Deploy
@@ -101,6 +100,6 @@ Os arquivos de build estarão em `build/web/`. Você pode então hospedar esses 
 Distribuído sob a Licença MIT.
 ---
 
-**[Opcional: Adicione uma seção "Autor" ou "Contato"]**
-
-Desenvolvido por Yago Oliveira - yagoliveira92@gmail.com
+**Autor**
+Desenvolvido por Yago Oliveira - yagoliveira92@gmail.com como parte da disciplina tópicos avançados
+em engenharia de software
